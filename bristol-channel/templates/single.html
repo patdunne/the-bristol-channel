@@ -1,0 +1,55 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+<!-- wp:group {"tagName":"main","className":"bc-wrap","layout":{"type":"default"}} -->
+<main class="wp-block-group bc-wrap">
+<!-- wp:group {"tagName":"div","className":"bc-article-layout","layout":{"type":"default"}} -->
+<div class="wp-block-group bc-article-layout">
+<!-- wp:group {"tagName":"article","className":"bc-article","layout":{"type":"default"}} -->
+<article class="wp-block-group bc-article">
+<!-- wp:group {"tagName":"div","className":"bc-article__head","layout":{"type":"default"}} -->
+<div class="wp-block-group bc-article__head">
+<!-- wp:post-terms {"term":"post_tag","className":"bc-kicker"} /-->
+<!-- wp:post-title {"level":1,"className":"bc-h-xl"} /-->
+<!-- wp:post-excerpt {"excerptLength":40,"className":"bc-standfirst"} /-->
+<!-- wp:group {"className":"bc-byline-row","layout":{"type":"flex","flexWrap":"wrap"}} -->
+<div class="wp-block-group bc-byline-row">
+<!-- wp:post-author-name {"isLink":false,"className":"bc-byline"} /-->
+<!-- wp:post-date {"format":"j M Y, g:i a","className":"bc-meta"} /-->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+<!-- wp:post-featured-image {"className":"bc-article__img bc-with-caption"} /-->
+<!-- wp:group {"tagName":"div","className":"bc-article__body","layout":{"type":"default"}} -->
+<div class="wp-block-group bc-article__body">
+<!-- wp:post-content {"layout":{"type":"default"}} /-->
+</div>
+<!-- /wp:group -->
+<!-- wp:post-terms {"term":"post_tag","prefix":"Tagged: ","separator":", ","className":"bc-article__tags"} /-->
+</article>
+<!-- /wp:group -->
+<!-- wp:group {"tagName":"aside","className":"bc-article-rail","layout":{"type":"default"}} -->
+<aside class="wp-block-group bc-article-rail">
+<!-- wp:template-part {"slug":"social-rail"} /-->
+</aside>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->
+<!-- wp:group {"className":"bc-related","layout":{"type":"default"}} -->
+<div class="wp-block-group bc-related">
+<!-- wp:paragraph {"className":"bc-kicker"} -->
+<p class="bc-kicker">Related stories</p>
+<!-- /wp:paragraph -->
+<!-- wp:query {"queryId":904,"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"className":"bc-q-related"} -->
+<div class="wp-block-query bc-q-related">
+<!-- wp:post-template -->
+<!-- wp:post-terms {"term":"post_tag","className":"bc-kicker bc-photo-slot bc-slot-card"} /-->
+<!-- wp:post-title {"level":3,"isLink":true,"className":"bc-h-md"} /-->
+<!-- wp:post-author-name {"isLink":false,"className":"bc-byline"} /-->
+<!-- /wp:post-template -->
+</div>
+<!-- /wp:query -->
+</div>
+<!-- /wp:group -->
+</main>
+<!-- /wp:group -->
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
