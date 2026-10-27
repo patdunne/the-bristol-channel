@@ -83,7 +83,7 @@ body{overflow-x:hidden}
 .bc-lead-img{margin:0}
 .bc-lead-img img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block}
 .bc-q-lead .bc-kicker{margin-top:20px}
-.bc-q-cards{margin-top:0;border-top:2px solid var(--bc-ink);padding-top:24px}
+.bc-q-cards{margin-top:0;border-top:2px solid var(--bc-ink);border-bottom:3px solid var(--bc-teal);padding-top:24px;padding-bottom:24px}
 .bc-q-cards .wp-block-post-template{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
 .bc-q-cards .wp-block-post-template>li{margin:0}
 .bc-card-img{margin:0 0 12px}
