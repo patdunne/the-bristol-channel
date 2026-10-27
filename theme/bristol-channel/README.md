@@ -6,7 +6,7 @@ A block theme (needs WordPress 6.5 or newer, PHP 7.4+). No plugins required.
 
 | Template | Where it is used |
 | --- | --- |
-| `front-page.html` | Home page: lead story (photo on top) on the left, "We the Furious" column on the right level with the lead (scrolls inside that height), three cards across the full width underneath |
+| `front-page.html` | Home page: lead story (photo on top) and three cards on the left, tall "We the Furious" column on the right running beside the lead and all three cards |
 | `single.html` | Article: section label, headline, standfirst, byline, image + caption, 680px text, tags, related stories, social column |
 | `page.html` | Static pages (About, Contact): full width, 680px text column, no social column |
 | `tag.html` (+ `archive`, `category`, `author`) | Section pages: Bristol, Bath, News, Politics, Business, Opinion |
