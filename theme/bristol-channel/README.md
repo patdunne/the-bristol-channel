@@ -7,7 +7,7 @@ A block theme (needs WordPress 6.5 or newer, PHP 7.4+). No plugins required.
 | Template | Where it is used |
 | --- | --- |
 | `front-page.html` | Home page: lead story (photo on top) and three cards on the left, tall "We the Furious" column on the right running beside the lead and all three cards |
-| `single.html` | Article: section label, headline, standfirst, byline, image + caption, 680px text, tags, related stories, social column |
+| `single.html` | Article: category label, headline, standfirst, byline, image + caption, 680px text, tags, related stories, social column |
 | `page.html` | Static pages (About, Contact): full width, 680px text column, no social column |
 | `tag.html` (+ `archive`, `category`, `author`) | Section pages: Bristol, Bath, News, Politics, Business, Opinion |
 | `search.html`, `404.html`, `index.html` | Required fallbacks |
@@ -19,9 +19,12 @@ A block theme (needs WordPress 6.5 or newer, PHP 7.4+). No plugins required.
 - **Three cards**: the next three newest posts.
 - No story appears twice. There is no Latest list on the front page.
 - The `featured` tag is hidden from readers (it never shows as a label or link).
+- The small label above every headline is the story's **category** (e.g. Bristol). The default "Uncategorized" category is hidden, so a story with no real category shows no label.
 - The lead and all three cards always show the story's featured image (no tick box needed on the front page).
 
 ## Section pages (tags)
+
+Tags drive the menu/section pages and the `featured` hero control; the label above headlines is the category, not a tag.
 
 The menu links go to `/tag/bristol/`, `/tag/bath/`, `/tag/news/`, `/tag/politics/`, `/tag/business/`, `/tag/opinion/`. Create tags with exactly those slugs and tag stories with them. To change the menu, edit `patterns/header.php` and `patterns/footer.php`.
 

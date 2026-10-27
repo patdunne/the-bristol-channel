@@ -136,66 +136,38 @@ add_filter(
 	2
 );
 
-/* ------------------------------------------------ Hide the internal "featured" tag from readers */
+/* ------------------------------------------------ Hide internal labels from readers
+ *
+ * - The "featured" tag only marks the lead story, so readers never see it.
+ * - The default "Uncategorized" category is hidden, so a story without a real category shows no label.
+ * The small label above a headline is the story's category (set in each template); tags are used for
+ * the section pages, the lead story and the "Tagged:" line at the bottom of a story.
+ */
 
 add_filter(
 	'get_the_terms',
 	function ( $terms, $post_id, $taxonomy ) {
-		if ( 'post_tag' !== $taxonomy || is_admin() || ! is_array( $terms ) ) {
+		if ( is_admin() || ! is_array( $terms ) ) {
 			return $terms;
 		}
-		$terms = array_values(
+		$hide = array(
+			'post_tag' => 'featured',
+			'category' => 'uncategorized',
+		);
+		if ( ! isset( $hide[ $taxonomy ] ) ) {
+			return $terms;
+		}
+		return array_values(
 			array_filter(
 				$terms,
-				function ( $term ) {
-					return 'featured' !== $term->slug;
+				function ( $term ) use ( $hide, $taxonomy ) {
+					return $hide[ $taxonomy ] !== $term->slug;
 				}
 			)
 		);
-
-		// Kicker above a headline: show only one tag, preferring the section tags in menu order.
-		if ( ! empty( $GLOBALS['bc_kicker_render'] ) && count( $terms ) > 1 ) {
-			$order = array( 'bristol', 'bath', 'news', 'politics', 'business', 'opinion' );
-			usort(
-				$terms,
-				function ( $a, $b ) use ( $order ) {
-					$ia = array_search( $a->slug, $order, true );
-					$ib = array_search( $b->slug, $order, true );
-					$ia = false === $ia ? 99 : $ia;
-					$ib = false === $ib ? 99 : $ib;
-					return $ia <=> $ib;
-				}
-			);
-			$terms = array( $terms[0] );
-		}
-		return $terms;
 	},
 	10,
 	3
-);
-
-add_filter(
-	'pre_render_block',
-	function ( $pre, $block ) {
-		if ( 'core/post-terms' === ( $block['blockName'] ?? '' ) && false !== strpos( $block['attrs']['className'] ?? '', 'bc-kicker' ) ) {
-			$GLOBALS['bc_kicker_render'] = true;
-		}
-		return $pre;
-	},
-	10,
-	2
-);
-
-add_filter(
-	'render_block',
-	function ( $content, $block ) {
-		if ( 'core/post-terms' === ( $block['blockName'] ?? '' ) ) {
-			unset( $GLOBALS['bc_kicker_render'] );
-		}
-		return $content;
-	},
-	5,
-	2
 );
 
 /* ------------------------------------------ "Show photo in secondary slots" checkbox */
