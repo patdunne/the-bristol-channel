@@ -6,7 +6,7 @@ A block theme (needs WordPress 6.5 or newer, PHP 7.4+). No plugins required.
 
 | Template | Where it is used |
 | --- | --- |
-| `front-page.html` | Home page: lead story (photo on top) and three cards on the left, tall "We the Furious" column on the right running beside the lead and all three cards |
+| `front-page.html` | Home page: lead story (photo on top) and rows of three cards on the left, tall "We the Furious" column on the right running beside the lead and all three cards |
 | `single.html` | Article: category label, headline, standfirst, byline, image + caption, 680px text, tags, related stories, social column |
 | `page.html` | Static pages (About, Contact): full width, 680px text column, no social column |
 | `tag.html` (+ `archive`, `category`, `author`) | Section pages: Bristol, Bath, News, Politics, Business, Opinion |
@@ -16,7 +16,7 @@ A block theme (needs WordPress 6.5 or newer, PHP 7.4+). No plugins required.
 ## Front page rules (automatic)
 
 - **Lead story**: the newest post tagged `featured` (if none, the newest post).
-- **Three cards**: the next three newest posts.
+- **Cards**: every other recent story (up to 60), newest first, three per row; the grid adds rows as stories arrive.
 - No story appears twice. There is no Latest list on the front page.
 - The `featured` tag is hidden from readers (it never shows as a label or link).
 - The small label above every headline is the story's **category** (e.g. Bristol). The default "Uncategorized" category is hidden, so a story with no real category shows no label.
