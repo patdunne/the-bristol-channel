@@ -44,6 +44,20 @@ add_action(
  * The slots are Query Loop blocks with the queryIds 901 and 902 (see the filter below).
  */
 
+/**
+ * "We the Furious" (WTF) posts: any post in the category with slug "wtf" goes into the right-hand
+ * column (post content only: no headline, excerpt or tags needed). They are kept out of the lead,
+ * the cards, related stories, section pages, search and the feed.
+ */
+function bc_wtf_term_id() {
+	static $id = null;
+	if ( null === $id ) {
+		$term = get_term_by( 'slug', 'wtf', 'category' );
+		$id   = $term ? (int) $term->term_id : 0;
+	}
+	return $id;
+}
+
 function bc_lead_post_id() {
 	static $id = null;
 	if ( null !== $id ) {
@@ -56,6 +70,7 @@ function bc_lead_post_id() {
 		'fields'              => 'ids',
 		'no_found_rows'       => true,
 		'ignore_sticky_posts' => true,
+		'category__not_in'    => array( bc_wtf_term_id() ),
 	);
 	$found = get_posts(
 		$base + array(
@@ -88,6 +103,7 @@ function bc_card_post_ids() {
 				'post_status'         => 'publish',
 				'posts_per_page'      => 3,
 				'post__not_in'        => array( bc_lead_post_id() ),
+				'category__not_in'    => array( bc_wtf_term_id() ),
 				'fields'              => 'ids',
 				'no_found_rows'       => true,
 				'ignore_sticky_posts' => true,
@@ -99,13 +115,13 @@ function bc_card_post_ids() {
 
 /**
  * Query Loop blocks are identified by their queryId (set in the templates):
- * 901 lead, 902 cards, 903 latest (not used on the front page now), 904 related stories.
+ * 901 lead, 902 cards, 903 latest (not used now), 904 related stories, 905 the WTF column.
  */
 add_filter(
 	'query_loop_block_query_vars',
 	function ( $query, $block ) {
 		$qid = isset( $block->context['queryId'] ) ? (int) $block->context['queryId'] : 0;
-		if ( $qid < 901 || $qid > 904 ) {
+		if ( $qid < 901 || $qid > 905 ) {
 			return $query;
 		}
 		$query['ignore_sticky_posts'] = true;
@@ -121,11 +137,17 @@ add_filter(
 			$query['post__not_in']      = array_merge( array( bc_lead_post_id() ), bc_card_post_ids() );
 			$query['posts_per_page']    = 5;
 			$GLOBALS['bc_latest_index'] = 0; // Resets the "first item always has a photo" counter.
+		} elseif ( 905 === $qid ) {
+			$query['category_name']  = 'wtf';
+			$query['posts_per_page'] = 8;
+			$query['orderby']        = 'date';
+			$query['order']          = 'DESC';
 		} else {
 			$post_id = get_queried_object_id();
 			$tags    = wp_get_post_terms( $post_id, 'post_tag', array( 'fields' => 'ids' ) );
-			$query['post__not_in']   = array( $post_id );
-			$query['posts_per_page'] = 3;
+			$query['post__not_in']     = array( $post_id );
+			$query['posts_per_page']   = 3;
+			$query['category__not_in'] = array( bc_wtf_term_id() );
 			if ( $tags ) {
 				$query['tag__in'] = $tags;
 			}
@@ -168,6 +190,38 @@ add_filter(
 	},
 	10,
 	3
+);
+
+/* WTF posts stay out of the main listings (home, sections, search, feed) and have no page of their own. */
+
+add_action(
+	'pre_get_posts',
+	function ( $q ) {
+		if ( is_admin() || ! $q->is_main_query() || ! bc_wtf_term_id() || $q->is_category( 'wtf' ) ) {
+			return;
+		}
+		if ( $q->is_home() || $q->is_archive() || $q->is_search() || $q->is_feed() ) {
+			$q->set( 'category__not_in', array_merge( (array) $q->get( 'category__not_in' ), array( bc_wtf_term_id() ) ) );
+		}
+	}
+);
+
+add_action(
+	'template_redirect',
+	function () {
+		if ( is_singular( 'post' ) && bc_wtf_term_id() && has_category( 'wtf', get_queried_object_id() ) ) {
+			wp_safe_redirect( home_url( '/' ), 302 );
+			exit;
+		}
+	}
+);
+
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		wp_add_inline_style( 'bristol-channel', '.bc-rail .wp-block-post-template{list-style:none;margin:0;padding:0}.bc-rail .wp-block-post-template>li{margin:0 0 16px}.bc-rail .wp-block-post-content>*{margin-top:0}' );
+	},
+	20
 );
 
 /* ------------------------------------------ "Show photo in secondary slots" checkbox */
