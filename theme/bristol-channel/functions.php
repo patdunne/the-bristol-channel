@@ -219,7 +219,7 @@ add_action(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_add_inline_style( 'bristol-channel', '.bc-rail .wp-block-post-template{list-style:none;margin:0;padding:0}.bc-rail .wp-block-post-template>li{margin:0 0 16px}.bc-rail .wp-block-post-content>*{margin-top:0}' );
+		wp_add_inline_style( 'bristol-channel', '.bc-rail .wp-block-post-template{list-style:none;margin:0;padding:0}.bc-rail .wp-block-post-template>li{margin:0 0 6px}.bc-rail .wp-block-post-content>*{margin-top:0;margin-bottom:0}.bc-rail .wp-block-embed{margin:0}.bc-rail .twitter-tweet,.bc-rail .twitter-tweet-rendered{margin-top:0!important;margin-bottom:0!important}' );
 	},
 	20
 );
