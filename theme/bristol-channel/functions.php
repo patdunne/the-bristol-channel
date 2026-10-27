@@ -39,10 +39,9 @@ add_action(
 /* ------------------------------------------------- Front page story slots
  *
  * Lead story   : newest post tagged "featured" (falls back to the newest post).
- * Cards        : the next two newest posts, skipping the lead.
- * Latest list  : the next five newest after the cards.
+ * Cards        : the next three newest posts, skipping the lead.
  * No story appears twice on the front page.
- * The slots are Query Loop blocks with the queryIds 901, 902 and 903 (see the filter below).
+ * The slots are Query Loop blocks with the queryIds 901 and 902 (see the filter below).
  */
 
 function bc_lead_post_id() {
@@ -87,7 +86,7 @@ function bc_card_post_ids() {
 			array(
 				'post_type'           => 'post',
 				'post_status'         => 'publish',
-				'posts_per_page'      => 2,
+				'posts_per_page'      => 3,
 				'post__not_in'        => array( bc_lead_post_id() ),
 				'fields'              => 'ids',
 				'no_found_rows'       => true,
@@ -100,7 +99,7 @@ function bc_card_post_ids() {
 
 /**
  * Query Loop blocks are identified by their queryId (set in the templates):
- * 901 lead, 902 cards, 903 latest, 904 related stories.
+ * 901 lead, 902 cards, 903 latest (not used on the front page now), 904 related stories.
  */
 add_filter(
 	'query_loop_block_query_vars',
@@ -117,7 +116,7 @@ add_filter(
 		} elseif ( 902 === $qid ) {
 			$query['post__in']       = bc_card_post_ids() ? bc_card_post_ids() : array( 0 );
 			$query['orderby']        = 'post__in';
-			$query['posts_per_page'] = 2;
+			$query['posts_per_page'] = 3;
 		} elseif ( 903 === $qid ) {
 			$query['post__not_in']      = array_merge( array( bc_lead_post_id() ), bc_card_post_ids() );
 			$query['posts_per_page']    = 5;
