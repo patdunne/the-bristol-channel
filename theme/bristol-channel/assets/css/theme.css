@@ -71,8 +71,10 @@ body{overflow-x:hidden}
    running the full height of the lead and all three cards. */
 .bc-home{margin-top:24px}
 .bc-home__grid{display:grid;grid-template-columns:minmax(0,1fr) var(--bc-rail);grid-template-areas:"lead rail" "cards rail";grid-template-rows:auto 1fr;column-gap:32px}
+.bc-home .bc-home__grid>*{margin-block-start:0}
 .bc-home__lead{grid-area:lead}
 .bc-home__cards{grid-area:cards;align-self:start}
+.bc-home .bc-home__cards{margin-top:32px}
 .bc-home__cards:not(:has(li)){display:none}
 .bc-home__rail{grid-area:rail;display:flex}
 .bc-home__rail>.wp-block-template-part{flex:1;display:flex;width:100%}
@@ -81,7 +83,7 @@ body{overflow-x:hidden}
 .bc-lead-img{margin:0}
 .bc-lead-img img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block}
 .bc-q-lead .bc-kicker{margin-top:20px}
-.bc-q-cards{margin-top:32px;border-top:2px solid var(--bc-ink);padding-top:24px}
+.bc-q-cards{margin-top:0;border-top:2px solid var(--bc-ink);padding-top:24px}
 .bc-q-cards .wp-block-post-template{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
 .bc-q-cards .wp-block-post-template>li{margin:0}
 .bc-card-img{margin:0 0 12px}
@@ -123,7 +125,7 @@ body{overflow-x:hidden}
 /* ---------- Tablet ---------- */
 @media (max-width:1023px){
   .bc-home__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"lead" "cards" "rail";grid-template-rows:auto;row-gap:32px}
-  .bc-q-cards{margin-top:0}
+  .bc-home .bc-home__cards{margin-top:0}
   .bc-rail .bc-rail__post{max-width:none}
   .bc-article-layout{grid-template-columns:minmax(0,1fr);gap:32px}
   .bc-related .wp-block-post-template{grid-template-columns:repeat(2,1fr)}
