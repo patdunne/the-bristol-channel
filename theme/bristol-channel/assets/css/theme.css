@@ -66,24 +66,26 @@ body{overflow-x:hidden}
 .bc-rail iframe,.bc-rail .twitter-tweet,.bc-rail .fb-post{max-width:100%!important}
 .bc-rail .wp-block-embed{margin:0 0 16px}
 
-/* ---------- Front page ---------- */
+/* ---------- Front page ----------
+   Two columns: lead story, then two cards, on the left; the We the Furious rail on the right,
+   running the full height of the lead and both cards. */
 .bc-home{margin-top:24px}
-.bc-home__grid{display:grid;grid-template-columns:var(--bc-side) minmax(0,1fr) var(--bc-rail);grid-template-areas:"latest lead rail";gap:0}
-.bc-home__latest{grid-area:latest;padding-right:var(--bc-gutter)}
-.bc-home__lead{grid-area:lead;padding:0 var(--bc-gutter);border-left:1px solid var(--bc-mist);border-right:1px solid var(--bc-mist)}
-.bc-home__rail{grid-area:rail;padding-left:var(--bc-gutter);display:flex}
+.bc-home__grid{display:grid;grid-template-columns:minmax(0,1fr) var(--bc-rail);grid-template-areas:"lead rail" "cards rail";grid-template-rows:auto 1fr;column-gap:32px}
+.bc-home__lead{grid-area:lead}
+.bc-home__cards{grid-area:cards;align-self:start}
+.bc-home__cards:not(:has(li)){display:none}
+.bc-home__rail{grid-area:rail;display:flex}
 .bc-home__rail>.wp-block-template-part{flex:1;display:flex;width:100%}
 .bc-home__rail .bc-rail{flex:1;width:100%}
 .bc-home__rail>*{margin:0}
-.bc-q-latest .wp-block-post-template{list-style:none;margin:0;padding:0}
-.bc-q-latest .wp-block-post-template>li{padding:16px 0;border-top:1px solid var(--bc-mist);margin:0}
-.bc-q-latest .wp-block-post-template>li:first-child{border-top:0;padding-top:0}
-.bc-q-latest .bc-meta{margin-top:6px}
-.bc-lead-img{margin:16px 0 0}
-.bc-lead-img img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block}
-.bc-q-cards{margin-top:24px;border-top:1px solid var(--bc-mist);padding-top:24px}
+.bc-lead-img{margin:0}
+.bc-lead-img img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;display:block}
+.bc-q-lead .bc-kicker{margin-top:20px}
+.bc-q-cards{margin-top:32px;border-top:2px solid var(--bc-ink);padding-top:24px}
 .bc-q-cards .wp-block-post-template{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .bc-q-cards .wp-block-post-template>li{margin:0}
+.bc-card-img{margin:0 0 12px}
+.bc-card-img img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block}
 
 /* ---------- Article ---------- */
 .bc-article-layout{display:grid;grid-template-columns:minmax(0,1fr) var(--bc-rail);gap:48px;padding-top:32px;align-items:start}
@@ -120,12 +122,8 @@ body{overflow-x:hidden}
 
 /* ---------- Tablet ---------- */
 @media (max-width:1023px){
-  .bc-home__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"lead" "latest" "rail";gap:32px}
-  .bc-home__lead{padding:0;border:0}
-  .bc-home__latest{padding:0}
-  .bc-home__rail{padding:0}
-  .bc-q-latest .wp-block-post-template{display:grid;grid-template-columns:repeat(2,1fr);gap:0 24px}
-  .bc-q-latest .wp-block-post-template>li:nth-child(2){border-top:0;padding-top:0}
+  .bc-home__grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"lead" "cards" "rail";grid-template-rows:auto;row-gap:32px}
+  .bc-q-cards{margin-top:0}
   .bc-rail .bc-rail__post{max-width:none}
   .bc-article-layout{grid-template-columns:minmax(0,1fr);gap:32px}
   .bc-related .wp-block-post-template{grid-template-columns:repeat(2,1fr)}
@@ -141,8 +139,6 @@ body{overflow-x:hidden}
   .bc-nav-bar{padding:12px 0}
   .bc-h-xl{font-size:32px}
   .bc-q-cards .wp-block-post-template,.bc-related .wp-block-post-template,.bc-archive .wp-block-post-template{grid-template-columns:minmax(0,1fr)}
-  .bc-q-latest .wp-block-post-template{grid-template-columns:minmax(0,1fr)}
-  .bc-q-latest .wp-block-post-template>li:nth-child(2){border-top:1px solid var(--bc-mist);padding-top:16px}
   .bc-standfirst,.bc-standfirst p{font-size:19px}
   .bc-footer .bc-logo img{width:240px}
 }

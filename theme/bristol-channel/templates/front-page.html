@@ -8,6 +8,7 @@
 <!-- wp:query {"queryId":901,"query":{"perPage":1,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"className":"bc-q-lead"} -->
 <div class="wp-block-query bc-q-lead">
 <!-- wp:post-template -->
+<!-- wp:post-featured-image {"isLink":true,"className":"bc-lead-img bc-with-caption"} /-->
 <!-- wp:post-terms {"term":"post_tag","className":"bc-kicker"} /-->
 <!-- wp:post-title {"level":2,"isLink":true,"className":"bc-h-xl"} /-->
 <!-- wp:post-excerpt {"excerptLength":30,"className":"bc-standfirst"} /-->
@@ -17,32 +18,21 @@
 <!-- wp:post-date {"format":"j M Y, g:i a","className":"bc-meta"} /-->
 </div>
 <!-- /wp:group -->
-<!-- wp:post-featured-image {"isLink":true,"className":"bc-lead-img bc-with-caption"} /-->
-<!-- /wp:post-template -->
-</div>
-<!-- /wp:query -->
-<!-- wp:query {"queryId":902,"query":{"perPage":2,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"className":"bc-q-cards"} -->
-<div class="wp-block-query bc-q-cards">
-<!-- wp:post-template -->
-<!-- wp:post-terms {"term":"post_tag","className":"bc-kicker bc-photo-slot bc-slot-card"} /-->
-<!-- wp:post-title {"level":3,"isLink":true,"className":"bc-h-md"} /-->
-<!-- wp:post-excerpt {"excerptLength":18,"className":"bc-summary"} /-->
-<!-- wp:post-author-name {"isLink":false,"className":"bc-byline"} /-->
 <!-- /wp:post-template -->
 </div>
 <!-- /wp:query -->
 </div>
 <!-- /wp:group -->
-<!-- wp:group {"tagName":"div","className":"bc-home__latest","layout":{"type":"default"}} -->
-<div class="wp-block-group bc-home__latest">
-<!-- wp:paragraph {"className":"bc-kicker bc-sechead"} -->
-<p class="bc-kicker bc-sechead">Latest</p>
-<!-- /wp:paragraph -->
-<!-- wp:query {"queryId":903,"query":{"perPage":5,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"className":"bc-q-latest"} -->
-<div class="wp-block-query bc-q-latest">
+<!-- wp:group {"tagName":"div","className":"bc-home__cards","layout":{"type":"default"}} -->
+<div class="wp-block-group bc-home__cards">
+<!-- wp:query {"queryId":902,"query":{"perPage":2,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false},"className":"bc-q-cards"} -->
+<div class="wp-block-query bc-q-cards">
 <!-- wp:post-template -->
-<!-- wp:post-title {"level":3,"isLink":true,"className":"bc-h-sm bc-photo-slot bc-slot-latest"} /-->
-<!-- wp:post-date {"format":"j M, g:i a","className":"bc-meta"} /-->
+<!-- wp:post-featured-image {"isLink":true,"className":"bc-card-img"} /-->
+<!-- wp:post-terms {"term":"post_tag","className":"bc-kicker"} /-->
+<!-- wp:post-title {"level":3,"isLink":true,"className":"bc-h-md"} /-->
+<!-- wp:post-excerpt {"excerptLength":18,"className":"bc-summary"} /-->
+<!-- wp:post-author-name {"isLink":false,"className":"bc-byline"} /-->
 <!-- /wp:post-template -->
 </div>
 <!-- /wp:query -->

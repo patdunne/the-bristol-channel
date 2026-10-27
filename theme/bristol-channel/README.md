@@ -6,7 +6,7 @@ A block theme (needs WordPress 6.5 or newer, PHP 7.4+). No plugins required.
 
 | Template | Where it is used |
 | --- | --- |
-| `front-page.html` | Home page: left "Latest" list, lead story and two cards, right "We the Furious" column |
+| `front-page.html` | Home page: lead story (photo on top) and two cards on the left, tall "We the Furious" column on the right running beside all three stories |
 | `single.html` | Article: section label, headline, standfirst, byline, image + caption, 680px text, tags, related stories, social column |
 | `page.html` | Static pages (About, Contact): full width, 680px text column, no social column |
 | `tag.html` (+ `archive`, `category`, `author`) | Section pages: Bristol, Bath, News, Politics, Business, Opinion |
@@ -17,9 +17,9 @@ A block theme (needs WordPress 6.5 or newer, PHP 7.4+). No plugins required.
 
 - **Lead story**: the newest post tagged `featured` (if none, the newest post).
 - **Two cards**: the next two newest posts.
-- **Latest list**: the next five newest. No story appears twice.
+- No story appears twice. There is no Latest list on the front page.
 - The `featured` tag is hidden from readers (it never shows as a label or link).
-- The top item in Latest always shows its photo. Other Latest items and the two cards show a photo only if the post's **"Front page photo" box ("Show photo in secondary slots")** is ticked in the post editor sidebar.
+- The lead and both cards always show the story's featured image (no tick box needed on the front page).
 
 ## Section pages (tags)
 
