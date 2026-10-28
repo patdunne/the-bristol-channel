@@ -20,7 +20,7 @@ A block theme (needs WordPress 6.5 or newer, PHP 7.4+). No plugins required.
 - No story appears twice. There is no Latest list on the front page.
 - The `featured` tag is hidden from readers (it never shows as a label or link).
 - The small label above every headline is the story's **category** (e.g. Bristol). The default "Uncategorized" category is hidden, so a story with no real category shows no label.
-- The lead and all three cards always show the story's featured image (no tick box needed on the front page).
+- The lead, every card and every Related story always show the story's featured image (no tick box).
 
 ## Section pages (tags)
 

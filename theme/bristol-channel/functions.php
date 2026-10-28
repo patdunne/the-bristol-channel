@@ -136,7 +136,6 @@ add_filter(
 		} elseif ( 903 === $qid ) {
 			$query['post__not_in']      = array_merge( array( bc_lead_post_id() ), bc_card_post_ids() );
 			$query['posts_per_page']    = 5;
-			$GLOBALS['bc_latest_index'] = 0; // Resets the "first item always has a photo" counter.
 		} elseif ( 905 === $qid ) {
 			$query['category_name']  = 'wtf';
 			$query['posts_per_page'] = 8;
@@ -224,55 +223,10 @@ add_action(
 	20
 );
 
-/* ------------------------------------------ "Show photo in secondary slots" checkbox */
-
-add_action(
-	'add_meta_boxes',
-	function () {
-		add_meta_box(
-			'bc_secondary_photo',
-			__( 'Front page photo', 'bristol-channel' ),
-			function ( $post ) {
-				wp_nonce_field( 'bc_secondary_photo', 'bc_secondary_photo_nonce' );
-				$checked = (bool) get_post_meta( $post->ID, '_bc_show_photo', true );
-				echo '<label><input type="checkbox" name="bc_show_photo" value="1" ' . checked( $checked, true, false ) . '> ';
-				echo esc_html__( 'Show photo in secondary slots', 'bristol-channel' ) . '</label>';
-				echo '<p class="description">' . esc_html__( 'Shows the featured image when this story appears in the Latest list or as a card under the lead. The first item in the Latest list always shows its photo.', 'bristol-channel' ) . '</p>';
-			},
-			'post',
-			'side',
-			'default',
-			array( '__back_compat_meta_box' => false )
-		);
-	}
-);
-
-add_action(
-	'save_post_post',
-	function ( $post_id ) {
-		if ( ! isset( $_POST['bc_secondary_photo_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['bc_secondary_photo_nonce'] ) ), 'bc_secondary_photo' ) ) {
-			return;
-		}
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
-			return;
-		}
-		if ( ! empty( $_POST['bc_show_photo'] ) ) {
-			update_post_meta( $post_id, '_bc_show_photo', 1 );
-		} else {
-			delete_post_meta( $post_id, '_bc_show_photo' );
-		}
-	}
-);
-
 /* ---------------------------------------------------- Block output tweaks
  *
- * 1. Post Title blocks with class bc-photo-slot get the story's photo above them,
- *    when the "Show photo" box is ticked (or when it is the first Latest item).
- * 2. Featured Image blocks with class bc-with-caption get the image's caption underneath
- *    (the caption and photo credit are typed in the Media Library "Caption" field).
+ * Featured Image blocks with class bc-with-caption get the image's caption underneath
+ * (the caption and photo credit are typed in the Media Library "Caption" field).
  */
 
 add_filter(
@@ -280,36 +234,14 @@ add_filter(
 	function ( $content, $block, $instance ) {
 		$name  = isset( $block['blockName'] ) ? $block['blockName'] : '';
 		$class = isset( $block['attrs']['className'] ) ? $block['attrs']['className'] : '';
-		if ( ! $class ) {
+		if ( 'core/post-featured-image' !== $name || false === strpos( $class, 'bc-with-caption' ) ) {
 			return $content;
 		}
 		$post_id = ( $instance && isset( $instance->context['postId'] ) ) ? (int) $instance->context['postId'] : 0;
-		if ( ! $post_id ) {
-			return $content;
-		}
-
-		if ( in_array( $name, array( 'core/post-title', 'core/post-terms' ), true ) && false !== strpos( $class, 'bc-photo-slot' ) ) {
-			$show = (bool) get_post_meta( $post_id, '_bc_show_photo', true );
-			if ( false !== strpos( $class, 'bc-slot-latest' ) ) {
-				$GLOBALS['bc_latest_index'] = isset( $GLOBALS['bc_latest_index'] ) ? $GLOBALS['bc_latest_index'] + 1 : 1;
-				if ( 1 === $GLOBALS['bc_latest_index'] ) {
-					$show = true;
-				}
-			}
-			if ( $show && has_post_thumbnail( $post_id ) ) {
-				$img   = get_the_post_thumbnail( $post_id, 'bc-card', array( 'loading' => 'lazy' ) );
-				$photo = '<figure class="bc-photo"><a href="' . esc_url( get_permalink( $post_id ) ) . '" tabindex="-1" aria-hidden="true">' . $img . '</a></figure>';
-				return $photo . $content;
-			}
-			return $content;
-		}
-
-		if ( 'core/post-featured-image' === $name && false !== strpos( $class, 'bc-with-caption' ) ) {
-			$thumb = get_post_thumbnail_id( $post_id );
-			$cap   = $thumb ? wp_get_attachment_caption( $thumb ) : '';
-			if ( $cap ) {
-				return $content . '<p class="bc-caption">' . wp_kses_post( $cap ) . '</p>';
-			}
+		$thumb   = $post_id ? get_post_thumbnail_id( $post_id ) : 0;
+		$cap     = $thumb ? wp_get_attachment_caption( $thumb ) : '';
+		if ( $cap ) {
+			return $content . '<p class="bc-caption">' . wp_kses_post( $cap ) . '</p>';
 		}
 		return $content;
 	},
