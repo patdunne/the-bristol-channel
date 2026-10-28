@@ -191,7 +191,7 @@ final class BC_SEO {
 	}
 
 	public static function robots( $robots ) {
-		if ( is_search() || is_404() || ( is_singular( 'post' ) && self::is_wtf( get_queried_object_id() ) ) || ( is_category( 'wtf' ) ) ) {
+		if ( is_search() || is_404() || ( is_singular( 'post' ) && self::is_wtf( get_queried_object_id() ) ) || is_category() ) {
 			$robots['noindex'] = true;
 			$robots['follow']  = true;
 			unset( $robots['index'] );
@@ -215,8 +215,9 @@ final class BC_SEO {
 
 	public static function head() {
 		$site = get_bloginfo( 'name' );
-		$tags = array();
-		$ld   = array();
+		$tags  = array();
+		$ld    = array();
+		$canon = '';
 
 		if ( is_singular( 'post' ) ) {
 			$post  = get_queried_object();
@@ -225,7 +226,8 @@ final class BC_SEO {
 			$desc  = self::post_description( $post );
 			$url   = get_permalink( $post );
 			$img   = self::post_image( $post->ID );
-			$sect  = self::section_name( $post->ID );
+			$img   = $img ? $img : self::default_image();
+			$sect  =self::section_name( $post->ID );
 
 			$tags[] = array( 'name', 'description', $desc );
 			$tags[] = array( 'property', 'og:type', 'article' );
@@ -288,7 +290,15 @@ final class BC_SEO {
 			$tags[] = array( 'property', 'og:title', $site );
 			$tags[] = array( 'property', 'og:description', $desc );
 			$tags[] = array( 'property', 'og:url', home_url( '/' ) );
-			$tags[] = array( 'name', 'twitter:card', 'summary' );
+			$canon  = home_url( '/' );
+			$dimg   = self::default_image();
+			if ( $dimg ) {
+				$tags[] = array( 'property', 'og:image', $dimg['url'] );
+				$tags[] = array( 'property', 'og:image:width', $dimg['width'] );
+				$tags[] = array( 'property', 'og:image:height', $dimg['height'] );
+				$tags[] = array( 'name', 'twitter:image', $dimg['url'] );
+			}
+			$tags[] = array( 'name', 'twitter:card', $dimg ? 'summary_large_image' : 'summary' );
 			$tags[] = array( 'name', 'twitter:title', $site );
 			$tags[] = array( 'name', 'twitter:description', $desc );
 			$ld[]   = array(
@@ -306,6 +316,24 @@ final class BC_SEO {
 			$tags[] = array( 'property', 'og:title', $term->name . ' – ' . $site );
 			$tags[] = array( 'property', 'og:description', $desc );
 			$tags[] = array( 'property', 'og:url', get_term_link( $term ) );
+			$dimg   = self::default_image();
+			if ( $dimg ) {
+				$tags[] = array( 'property', 'og:image', $dimg['url'] );
+				$tags[] = array( 'property', 'og:image:width', $dimg['width'] );
+				$tags[] = array( 'property', 'og:image:height', $dimg['height'] );
+				$tags[] = array( 'name', 'twitter:image', $dimg['url'] );
+			}
+			$tags[] = array( 'name', 'twitter:card', $dimg ? 'summary_large_image' : 'summary' );
+			if ( is_tag() ) {
+				$canon = get_term_link( $term );
+				if ( is_paged() ) {
+					$canon = get_pagenum_link( (int) get_query_var( 'paged' ), false );
+				}
+			}
+		}
+
+		if ( $canon && ! is_wp_error( $canon ) ) {
+			echo '<link rel="canonical" href="' . esc_url( $canon ) . "\" />\n";
 		}
 
 		if ( $tags ) {
@@ -320,12 +348,25 @@ final class BC_SEO {
 		}
 	}
 
+	/** Fallback sharing image (1200x630). Option bcseo_default_image holds its URL. */
+	private static function default_image() {
+		$url = get_option( 'bcseo_default_image' );
+		if ( ! $url ) {
+			return false;
+		}
+		return array( 'url' => $url, 'width' => 1200, 'height' => 630, 'alt' => get_bloginfo( 'name' ) );
+	}
+
 	private static function publisher() {
 		$pub = array(
 			'@type' => 'NewsMediaOrganization',
 			'name'  => get_bloginfo( 'name' ),
 			'url'   => home_url( '/' ),
 		);
+		$same = array_filter( (array) get_option( 'bcseo_same_as', array() ) );
+		if ( $same ) {
+			$pub['sameAs'] = array_values( $same );
+		}
 		$icon = get_site_icon_url( 512 );
 		if ( $icon ) {
 			$pub['logo'] = array( '@type' => 'ImageObject', 'url' => $icon );
