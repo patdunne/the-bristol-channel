@@ -36,6 +36,25 @@ add_action(
 	}
 );
 
+/* ------------------------------------------------------ Breakout quote
+ * A block style for Pullquote and Quote: Block settings > Styles > "Breakout quote".
+ * Floats right beside the story text on desktop; full width on phones.
+ */
+add_action(
+	'init',
+	function () {
+		foreach ( array( 'core/pullquote', 'core/quote' ) as $block ) {
+			register_block_style(
+				$block,
+				array(
+					'name'  => 'bc-breakout',
+					'label' => 'Breakout quote',
+				)
+			);
+		}
+	}
+);
+
 /* ------------------------------------------------- Front page story slots
  *
  * Lead story   : newest post tagged "featured" (falls back to the newest post).
