@@ -56,7 +56,7 @@ body{overflow-x:hidden}
 
 /* ---------- Social rail ---------- */
 .bc-rail{background:var(--bc-parchment);border-top:3px solid var(--bc-ink);padding:16px;box-sizing:border-box}
-.bc-rail__title{font-family:var(--bc-f-ui)!important;font-size:16px!important;line-height:1.2!important;font-weight:700!important;letter-spacing:.08em;text-transform:uppercase;text-align:center;color:var(--bc-navy)!important;margin:0 0 8px}
+.bc-rail__title{font-family:var(--bc-f-ui)!important;font-size:16px!important;line-height:1.2!important;font-weight:700!important;letter-spacing:.08em;text-transform:uppercase;text-align:center;color:var(--bc-red)!important;margin:0 0 8px}
 .bc-rail__title .bc-rail__sub{display:block;margin-top:1px;font-size:13px;font-style:italic;font-weight:400;letter-spacing:0;text-transform:none;color:#555}
 .bc-rail__post{padding:16px 0;border-top:1px solid var(--bc-mist);margin:0}
 .bc-rail__post:first-of-type{border-top:1px solid var(--bc-mist)}
