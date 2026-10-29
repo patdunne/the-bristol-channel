@@ -278,6 +278,83 @@ add_action(
 	20
 );
 
+/* ------------------------------------------------------------ Share bar
+ *
+ * A server-rendered block, <!-- wp:bristol-channel/share /-->, used in templates/single.html.
+ * Plain share links (no plugin, no tracking scripts) plus a Copy link button. To change the networks,
+ * edit the $networks list below; LinkedIn is included but switched off.
+ * Icons are from Tabler Icons (MIT licence).
+ */
+
+function bc_share_icon( $name ) {
+	$paths = array(
+		'x'        => '<path d="M4 4l11.733 16h4.267l-11.733 -16l-4.267 0"/><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"/>',
+		'facebook' => '<path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"/>',
+		'bluesky'  => '<path d="M6.335 5.144c-1.654 -1.199 -4.335 -2.127 -4.335 .826c0 .59 .35 4.953 .556 5.661c.713 2.463 3.13 2.75 5.444 2.369c-4.045 .665 -4.889 3.208 -2.667 5.41c1.03 1.018 1.913 1.59 2.667 1.59c2 0 3.134 -2.769 3.5 -3.5c.333 -.667 .5 -1.167 .5 -1.5c0 .333 .167 .833 .5 1.5c.366 .731 1.5 3.5 3.5 3.5c.754 0 1.637 -.571 2.667 -1.59c2.222 -2.203 1.378 -4.746 -2.667 -5.41c2.314 .38 4.73 .094 5.444 -2.369c.206 -.708 .556 -5.072 .556 -5.661c0 -2.953 -2.68 -2.025 -4.335 -.826c-2.293 1.662 -4.76 5.048 -5.665 6.856c-.905 -1.808 -3.372 -5.194 -5.665 -6.856"/>',
+		'whatsapp' => '<path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"/><path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"/>',
+		'linkedin' => '<path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 1 0 -4 0"/><path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4l0 -10"/>',
+		'mail'     => '<path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10"/><path d="M3 7l9 6l9 -6"/>',
+		'link'     => '<path d="M9 15l6 -6"/><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>',
+	);
+	$inner = isset( $paths[ $name ] ) ? $paths[ $name ] : '';
+	return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $inner . '</svg>';
+}
+
+add_action(
+	'init',
+	function () {
+		register_block_type(
+			'bristol-channel/share',
+			array(
+				'api_version'     => 3,
+				'uses_context'    => array( 'postId' ),
+				'render_callback' => function ( $attributes, $content, $block ) {
+					$post_id = ( $block && ! empty( $block->context['postId'] ) ) ? (int) $block->context['postId'] : (int) get_the_ID();
+					if ( ! $post_id ) {
+						return '';
+					}
+					$url   = rawurlencode( get_permalink( $post_id ) );
+					$title = rawurlencode( html_entity_decode( wp_strip_all_tags( get_the_title( $post_id ) ), ENT_QUOTES, 'UTF-8' ) );
+
+					// slug => array( label, link, enabled ).
+					$networks = array(
+						'x'        => array( 'Share on X', 'https://x.com/intent/post?url=' . $url . '&text=' . $title, true ),
+						'facebook' => array( 'Share on Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' . $url, true ),
+						'bluesky'  => array( 'Share on Bluesky', 'https://bsky.app/intent/compose?text=' . $title . '%20' . $url, true ),
+						'whatsapp' => array( 'Share on WhatsApp', 'https://wa.me/?text=' . $title . '%20' . $url, true ),
+						'linkedin' => array( 'Share on LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' . $url, false ),
+						'mail'     => array( 'Share by email', 'mailto:?subject=' . $title . '&body=' . $url, true ),
+					);
+
+					static $script_added = false;
+					if ( ! $script_added ) {
+						$script_added = true;
+						add_action(
+							'wp_footer',
+							function () {
+								echo '<script>(function(){document.addEventListener("click",function(e){var b=e.target.closest("[data-bc-copy]");if(!b){return;}var s=b.parentNode.querySelector(".bc-share__status");var done=function(){if(s){s.textContent="Link copied";setTimeout(function(){s.textContent="";},2500);}};var u=b.getAttribute("data-bc-copy");if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(done,function(){window.prompt("Copy this link",u);});}else{window.prompt("Copy this link",u);}});})();</script>';
+							},
+							99
+						);
+					}
+
+					$out  = '<div class="bc-share"><span class="bc-share__label">Share</span>';
+					foreach ( $networks as $slug => $n ) {
+						if ( ! $n[2] ) {
+							continue;
+						}
+						$external = ( 0 !== strpos( $n[1], 'mailto:' ) );
+						$out     .= '<a class="bc-share__btn bc-share__btn--' . esc_attr( $slug ) . '" href="' . esc_url( $n[1] ) . '"' . ( $external ? ' target="_blank" rel="noopener noreferrer"' : '' ) . ' aria-label="' . esc_attr( $n[0] ) . '" title="' . esc_attr( $n[0] ) . '">' . bc_share_icon( $slug ) . '</a>';
+					}
+					$out .= '<button type="button" class="bc-share__btn bc-share__btn--copy" data-bc-copy="' . esc_url( get_permalink( $post_id ) ) . '" aria-label="Copy link" title="Copy link">' . bc_share_icon( 'link' ) . '</button>';
+					$out .= '<span class="bc-share__status" role="status" aria-live="polite"></span></div>';
+					return $out;
+				},
+			)
+		);
+	}
+);
+
 /* ---------------------------------------------------- Block output tweaks
  *
  * Featured Image blocks with class bc-with-caption get the image's caption underneath

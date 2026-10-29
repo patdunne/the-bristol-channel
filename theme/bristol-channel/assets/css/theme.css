@@ -134,6 +134,7 @@ body{overflow-x:hidden}
   .bc-archive .wp-block-post-template{grid-template-columns:repeat(2,1fr)}
   .bc-archive .wp-block-post-template>li:first-child{grid-template-columns:1fr}
   .bc-archive .wp-block-post-template>li:first-child>*,.bc-archive .wp-block-post-template>li:first-child>.bc-photo{grid-column:1;grid-row:auto}
+  .bc-archive .wp-block-post-template>li:first-child>.bc-photo{margin:0 0 12px}
   .bc-h-xl{font-size:40px}
 }
 /* ---------- Phone ---------- */
@@ -156,4 +157,13 @@ body{overflow-x:hidden}
 .wp-block-pullquote.is-style-bc-breakout p,.wp-block-quote.is-style-bc-breakout p{font-family:var(--bc-f-head);font-size:25px;line-height:1.2;font-weight:700;font-style:italic;color:var(--bc-teal);margin:0;text-align:left}
 .wp-block-pullquote.is-style-bc-breakout cite,.wp-block-pullquote.is-style-bc-breakout .wp-block-pullquote__citation,.wp-block-quote.is-style-bc-breakout cite,.wp-block-quote.is-style-bc-breakout .wp-block-quote__citation{display:block;margin-top:12px;font-family:var(--bc-f-ui);font-size:12px;font-style:normal;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bc-ink);text-align:left}
 .bc-article__body .wp-block-post-content:after{content:"";display:table;clear:both}
+
+/* ---------- Share bar (block: bristol-channel/share) ---------- */
+.bc-share{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0 0;padding:10px 0;border-top:1px solid var(--bc-ink);border-bottom:1px solid var(--bc-ink)}
+.bc-share__label{font-family:var(--bc-f-ui);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-right:4px}
+.bc-share__btn{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:0;border:1px solid var(--bc-ink);border-radius:50%;background:transparent;color:var(--bc-ink);cursor:pointer;text-decoration:none;font:inherit;line-height:0}
+.bc-share__btn svg{width:18px;height:18px;display:block}
+.bc-share__btn:hover,.bc-share__btn:focus-visible{background:var(--bc-ink);color:var(--bc-white)}
+.bc-share__btn:focus-visible{outline:2px solid var(--bc-teal);outline-offset:2px}
+.bc-share__status{font-family:var(--bc-f-ui);font-size:12px;font-weight:600;color:var(--bc-teal);margin-left:4px}
 @media (max-width:700px){.wp-block-pullquote.is-style-bc-breakout,.wp-block-quote.is-style-bc-breakout{float:none;width:auto;max-width:none;margin:24px 0}}
