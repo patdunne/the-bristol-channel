@@ -24,6 +24,7 @@ body{overflow-x:hidden}
 .bc-standfirst,.bc-standfirst p{font-family:var(--bc-f-text);font-size:21px;line-height:1.4;margin:0 0 12px}
 .bc-summary,.bc-summary p{font-family:var(--bc-f-text);font-size:15px;line-height:1.5;margin:0 0 8px}
 .bc-byline,.bc-byline a{font-family:var(--bc-f-ui);font-size:13px;line-height:1.3;font-weight:600;letter-spacing:.02em;color:var(--bc-teal);text-decoration:none}
+.bc-byline:before{content:"By "}
 .bc-byline-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0}
 .bc-meta,.bc-meta a{font-family:var(--bc-f-ui);font-size:12px;line-height:1.3;letter-spacing:.02em;color:var(--bc-ink);text-decoration:none;margin:0}
 .bc-caption{font-family:var(--bc-f-ui);font-size:15px;line-height:1.4;font-weight:400;color:var(--bc-ink);margin:8px 0 0}
