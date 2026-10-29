@@ -8,7 +8,7 @@
 <!-- wp:group {"className":"bc-header bc-wrap","layout":{"type":"default"}} -->
 <div class="wp-block-group bc-header bc-wrap">
 <!-- wp:html -->
-<p class="bc-date"><?php echo esc_html( wp_date( 'l, j F Y' ) ); ?></p>
+<p class="bc-date"><?php echo esc_html( wp_date( 'F j, Y' ) ); ?></p>
 <!-- /wp:html -->
 <!-- wp:html -->
 <div class="bc-masthead"><a class="bc-logo" href="<?php echo esc_url( home_url( '/' ) ); ?>"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/bristol-channel-logo-black.svg' ) ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" width="680" height="52"></a><?php if ( get_bloginfo( 'description' ) ) : ?><p class="bc-tagline"><?php echo esc_html( get_bloginfo( 'description' ) ); ?></p><?php endif; ?></div>
