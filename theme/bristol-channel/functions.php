@@ -36,6 +36,37 @@ add_action(
 	}
 );
 
+/* ------------------------------------------------------ Pattern library
+ * Keep the editor's pattern inserter short: only this theme's own patterns (patterns/ folder)
+ * are offered. WordPress's built-in patterns and the online pattern directory are switched off.
+ * To keep a particular core pattern, skip its name inside the unregister loop below.
+ */
+add_filter( 'should_load_remote_block_patterns', '__return_false' );
+
+add_action(
+	'after_setup_theme',
+	function () {
+		remove_theme_support( 'core-block-patterns' );
+	},
+	11
+);
+
+add_action(
+	'init',
+	function () {
+		if ( ! class_exists( 'WP_Block_Patterns_Registry' ) ) {
+			return;
+		}
+		$registry = WP_Block_Patterns_Registry::get_instance();
+		foreach ( $registry->get_all_registered() as $pattern ) {
+			if ( 0 === strpos( $pattern['name'], 'core/' ) ) {
+				unregister_block_pattern( $pattern['name'] );
+			}
+		}
+	},
+	99
+);
+
 /* ------------------------------------------------------ Breakout quote
  * A block style for Pullquote and Quote: Block settings > Styles > "Breakout quote".
  * Floats right beside the story text on desktop; full width on phones.
