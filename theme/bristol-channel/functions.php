@@ -370,6 +370,46 @@ add_action(
 	}
 );
 
+/* ------------------------------------------------------------ Short web addresses
+ *
+ * When a new story is published without a hand-typed address, WordPress would normally use the whole
+ * headline. This shortens it to the first six meaningful words (filler words dropped, 50 characters at most).
+ * An address typed in the editor's URL box is left alone, and so are stories that already have one.
+ */
+
+define( 'BC_SLUG_WORDS', 6 );
+
+add_filter(
+	'wp_insert_post_data',
+	function ( $data, $postarr ) {
+		if ( 'post' !== $data['post_type'] || '' === $data['post_name'] || '' === trim( $data['post_title'] ) ) {
+			return $data;
+		}
+		if ( ! empty( $postarr['post_name'] ) ) {
+			return $data; // An address already exists or was typed by hand.
+		}
+		$title = html_entity_decode( wp_strip_all_tags( $data['post_title'] ), ENT_QUOTES, 'UTF-8' );
+		$title = strtolower( remove_accents( str_replace( array( "'", "\u{2019}", "\u{2018}" ), '', $title ) ) );
+		$words = preg_split( '/[^a-z0-9]+/', $title, -1, PREG_SPLIT_NO_EMPTY );
+		$skip  = array( 'a', 'an', 'the', 'and', 'or', 'but', 'of', 'to', 'in', 'on', 'at', 'for', 'with', 'by', 'from', 'as', 'is', 'are', 'was', 'be' );
+		$words = array_values( array_diff( $words, $skip ) );
+		$words = array_slice( $words, 0, BC_SLUG_WORDS );
+		while ( count( $words ) > 1 && strlen( implode( '-', $words ) ) > 50 ) {
+			array_pop( $words );
+		}
+		$slug = implode( '-', $words );
+		if ( '' === $slug || strlen( $slug ) >= strlen( $data['post_name'] ) ) {
+			return $data;
+		}
+		$id             = isset( $postarr['ID'] ) ? (int) $postarr['ID'] : 0;
+		$parent         = isset( $data['post_parent'] ) ? (int) $data['post_parent'] : 0;
+		$data['post_name'] = wp_unique_post_slug( $slug, $id, $data['post_status'], $data['post_type'], $parent );
+		return $data;
+	},
+	10,
+	2
+);
+
 /* ---------------------------------------------------- Block output tweaks
  *
  * Featured Image blocks with class bc-with-caption get the image's caption underneath
