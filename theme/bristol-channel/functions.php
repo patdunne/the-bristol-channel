@@ -282,7 +282,7 @@ add_action(
  *
  * A server-rendered block, <!-- wp:bristol-channel/share /-->, used in templates/single.html.
  * Plain share links (no plugin, no tracking scripts) plus a Copy link button. To change the networks,
- * edit the $networks list below; LinkedIn is included but switched off.
+ * edit the $networks list below (set the last value to false to hide a network).
  * Icons are from Tabler Icons (MIT licence).
  */
 
@@ -322,7 +322,7 @@ add_action(
 						'facebook' => array( 'Share on Facebook', 'https://www.facebook.com/sharer/sharer.php?u=' . $url, true ),
 						'bluesky'  => array( 'Share on Bluesky', 'https://bsky.app/intent/compose?text=' . $title . '%20' . $url, true ),
 						'whatsapp' => array( 'Share on WhatsApp', 'https://wa.me/?text=' . $title . '%20' . $url, true ),
-						'linkedin' => array( 'Share on LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' . $url, false ),
+						'linkedin' => array( 'Share on LinkedIn', 'https://www.linkedin.com/sharing/share-offsite/?url=' . $url, true ),
 						'mail'     => array( 'Share by email', 'mailto:?subject=' . $title . '&body=' . $url, true ),
 					);
 
