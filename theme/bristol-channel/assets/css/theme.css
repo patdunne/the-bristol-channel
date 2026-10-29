@@ -24,7 +24,7 @@ body{overflow-x:hidden}
 .bc-standfirst,.bc-standfirst p{font-family:var(--bc-f-text);font-size:21px;line-height:1.4;margin:0 0 12px}
 .bc-summary,.bc-summary p{font-family:var(--bc-f-text);font-size:15px;line-height:1.5;margin:0 0 8px}
 .bc-byline,.bc-byline a{font-family:var(--bc-f-ui);font-size:13px;line-height:1.3;font-weight:600;letter-spacing:.02em;color:var(--bc-teal);text-decoration:none}
-.bc-byline-row{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline;margin:0}
+.bc-byline-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0}
 .bc-meta,.bc-meta a{font-family:var(--bc-f-ui);font-size:12px;line-height:1.3;letter-spacing:.02em;color:var(--bc-ink);text-decoration:none;margin:0}
 .bc-caption{font-family:var(--bc-f-ui);font-size:15px;line-height:1.4;font-weight:400;color:var(--bc-ink);margin:8px 0 0}
 .bc-photo{margin:0 0 12px}
@@ -162,8 +162,9 @@ body{overflow-x:hidden}
 
 /* ---------- Share icons (block: bristol-channel/share) ----------
    Bare icons at the right end of the byline line; one Share icon with a popover on home page cards. */
-.bc-share{display:inline-flex;align-items:center;gap:6px;margin:0 0 0 auto;padding:0;border:0;align-self:center}
-.bc-share__label{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.bc-share{display:inline-flex;align-items:center;gap:6px;margin:0;padding:0;border:0}
+.bc-byline-row .bc-share{margin-left:auto}
+.bc-share__label{font-family:var(--bc-f-ui);font-size:12px;line-height:1;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-right:4px}
 .bc-share__btn{display:inline-flex;align-items:center;justify-content:center;width:auto;height:auto;padding:3px;border:0;border-radius:0;background:transparent;color:var(--bc-ink);cursor:pointer;text-decoration:none;font:inherit;line-height:0}
 .bc-share__btn svg{width:18px;height:18px;display:block}
 .bc-share__btn:hover{color:var(--bc-teal)}
