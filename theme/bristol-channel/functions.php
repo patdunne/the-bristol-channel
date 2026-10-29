@@ -280,7 +280,8 @@ add_action(
 
 /* ------------------------------------------------------------ Share bar
  *
- * A server-rendered block, <!-- wp:bristol-channel/share /-->, used in templates/single.html.
+ * A server-rendered block, <!-- wp:bristol-channel/share /-->, used in templates/single.html (full bar) and
+ * templates/front-page.html (full bar on the lead story, {"variant":"button"} on the cards).
  * Plain share links (no plugin, no tracking scripts) plus a Copy link button. To change the networks,
  * edit the $networks list below (set the last value to false to hide a network).
  * Icons are from Tabler Icons (MIT licence).
@@ -294,6 +295,7 @@ function bc_share_icon( $name ) {
 		'whatsapp' => '<path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"/><path d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"/>',
 		'linkedin' => '<path d="M8 11v5"/><path d="M8 8v.01"/><path d="M12 16v-5"/><path d="M16 16v-3a2 2 0 1 0 -4 0"/><path d="M3 7a4 4 0 0 1 4 -4h10a4 4 0 0 1 4 4v10a4 4 0 0 1 -4 4h-10a4 4 0 0 1 -4 -4l0 -10"/>',
 		'mail'     => '<path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10"/><path d="M3 7l9 6l9 -6"/>',
+		'share'    => '<path d="M13 4v4c-6.575 1.028 -9.02 6.788 -10 12c-.037 .206 5.384 -5.962 10 -6v4l8 -7l-8 -7"/>',
 		'link'     => '<path d="M9 15l6 -6"/><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464"/><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463"/>',
 	);
 	$inner = isset( $paths[ $name ] ) ? $paths[ $name ] : '';
@@ -308,6 +310,12 @@ add_action(
 			array(
 				'api_version'     => 3,
 				'uses_context'    => array( 'postId' ),
+				'attributes'      => array(
+					'variant' => array(
+						'type'    => 'string',
+						'default' => 'bar', // 'bar' = full row of icons; 'button' = one Share button that opens the row (home page cards).
+					),
+				),
 				'render_callback' => function ( $attributes, $content, $block ) {
 					$post_id = ( $block && ! empty( $block->context['postId'] ) ) ? (int) $block->context['postId'] : (int) get_the_ID();
 					if ( ! $post_id ) {
@@ -332,22 +340,29 @@ add_action(
 						add_action(
 							'wp_footer',
 							function () {
-								echo '<script>(function(){document.addEventListener("click",function(e){var b=e.target.closest("[data-bc-copy]");if(!b){return;}var s=b.parentNode.querySelector(".bc-share__status");var done=function(){if(s){s.textContent="Link copied";setTimeout(function(){s.textContent="";},2500);}};var u=b.getAttribute("data-bc-copy");if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(done,function(){window.prompt("Copy this link",u);});}else{window.prompt("Copy this link",u);}});})();</script>';
+								echo '<script>(function(){var cl=function(x){document.querySelectorAll(".bc-share-pop[open]").forEach(function(d){if(d!==x){d.removeAttribute("open");}});};document.addEventListener("click",function(e){cl(e.target.closest(".bc-share-pop"));});document.addEventListener("keydown",function(e){if(e.key==="Escape"){cl(null);}});document.addEventListener("click",function(e){var b=e.target.closest("[data-bc-copy]");if(!b){return;}var s=b.parentNode.querySelector(".bc-share__status");var done=function(){if(s){s.textContent="Link copied";setTimeout(function(){s.textContent="";},2500);}};var u=b.getAttribute("data-bc-copy");if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u).then(done,function(){window.prompt("Copy this link",u);});}else{window.prompt("Copy this link",u);}});})();</script>';
 							},
 							99
 						);
 					}
 
-					$out  = '<div class="bc-share"><span class="bc-share__label">Share</span>';
+					$links = '';
 					foreach ( $networks as $slug => $n ) {
 						if ( ! $n[2] ) {
 							continue;
 						}
 						$external = ( 0 !== strpos( $n[1], 'mailto:' ) );
-						$out     .= '<a class="bc-share__btn bc-share__btn--' . esc_attr( $slug ) . '" href="' . esc_url( $n[1] ) . '"' . ( $external ? ' target="_blank" rel="noopener noreferrer"' : '' ) . ' aria-label="' . esc_attr( $n[0] ) . '" title="' . esc_attr( $n[0] ) . '">' . bc_share_icon( $slug ) . '</a>';
+						$links   .= '<a class="bc-share__btn bc-share__btn--' . esc_attr( $slug ) . '" href="' . esc_url( $n[1] ) . '"' . ( $external ? ' target="_blank" rel="noopener noreferrer"' : '' ) . ' aria-label="' . esc_attr( $n[0] ) . '" title="' . esc_attr( $n[0] ) . '">' . bc_share_icon( $slug ) . '</a>';
 					}
-					$out .= '<button type="button" class="bc-share__btn bc-share__btn--copy" data-bc-copy="' . esc_url( get_permalink( $post_id ) ) . '" aria-label="Copy link" title="Copy link">' . bc_share_icon( 'link' ) . '</button>';
-					$out .= '<span class="bc-share__status" role="status" aria-live="polite"></span></div>';
+					$links .= '<button type="button" class="bc-share__btn bc-share__btn--copy" data-bc-copy="' . esc_url( get_permalink( $post_id ) ) . '" aria-label="Copy link" title="Copy link">' . bc_share_icon( 'link' ) . '</button>';
+					$links .= '<span class="bc-share__status" role="status" aria-live="polite"></span>';
+
+					if ( isset( $attributes['variant'] ) && 'button' === $attributes['variant'] ) {
+						// One Share button; the icon row opens beneath it (no JavaScript needed to open).
+						$out = '<details class="bc-share-pop"><summary class="bc-share__btn" aria-label="Share this story" title="Share">' . bc_share_icon( 'share' ) . '</summary><div class="bc-share-pop__row">' . $links . '</div></details>';
+					} else {
+						$out = '<div class="bc-share"><span class="bc-share__label">Share</span>' . $links . '</div>';
+					}
 					return $out;
 				},
 			)

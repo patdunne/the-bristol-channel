@@ -166,4 +166,17 @@ body{overflow-x:hidden}
 .bc-share__btn:hover,.bc-share__btn:focus-visible{background:var(--bc-ink);color:var(--bc-white)}
 .bc-share__btn:focus-visible{outline:2px solid var(--bc-teal);outline-offset:2px}
 .bc-share__status{font-family:var(--bc-f-ui);font-size:12px;font-weight:600;color:var(--bc-teal);margin-left:4px}
+.bc-share__status:empty{display:none}
+.bc-q-lead .bc-share{margin-top:20px}
+
+/* Home page cards: one Share button that opens the icon row (native <details>, closes on outside click or Esc) */
+.bc-card-foot{display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:8px;margin:0}
+.bc-card-foot>*{margin:0}
+.bc-share-pop{position:relative;line-height:0}
+.bc-share-pop>summary{list-style:none}
+.bc-share-pop>summary::-webkit-details-marker{display:none}
+.bc-share-pop[open]>summary{background:var(--bc-ink);color:var(--bc-white)}
+.bc-share-pop__row{position:absolute;right:0;top:calc(100% + 6px);z-index:20;display:flex;align-items:center;gap:4px;padding:6px;background:var(--bc-white);border:1px solid var(--bc-ink);border-radius:24px;white-space:nowrap}
+.bc-share-pop__row .bc-share__btn{width:32px;height:32px}
+.bc-share-pop__row .bc-share__btn svg{width:16px;height:16px}
 @media (max-width:700px){.wp-block-pullquote.is-style-bc-breakout,.wp-block-quote.is-style-bc-breakout{float:none;width:auto;max-width:none;margin:24px 0}}
